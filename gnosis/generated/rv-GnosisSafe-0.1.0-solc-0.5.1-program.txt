@@ -16,16 +16,19 @@
 	49 |-> PUSH ( 4 , 168831172 )
 	54 |-> EQ
 	55 |-> PUSH ( 2 , 424 )
+		// tag_2
 	58 |-> JUMPI
 	59 |-> DUP ( 1 )
 	60 |-> PUSH ( 4 , 223883027 )
 	65 |-> EQ
 	66 |-> PUSH ( 2 , 644 )
+		// tag_3
 	69 |-> JUMPI
 	70 |-> DUP ( 1 )
 	71 |-> PUSH ( 4 , 247958942 )
 	76 |-> EQ
 	77 |-> PUSH ( 2 , 735 )
+		// tag_4
 	80 |-> JUMPI
 	81 |-> DUP ( 1 )
 	82 |-> PUSH ( 4 , 498473812 )
@@ -181,9 +184,12 @@
 	412 |-> PUSH ( 4 , 4288785780 )
 	417 |-> EQ
 	418 |-> PUSH ( 2 , 5510 )
+		// tag_35
 	421 |-> JUMPI
 	422 |-> JUMPDEST
 	423 |-> STOP
+		/* "contracts/GnosisSafe.sol":12124:12491  function getMessageHash(... */
+tag_2:
 	424 |-> JUMPDEST
 	425 |-> CALLVALUE
 	426 |-> DUP ( 1 )
@@ -193,7 +199,9 @@
 	432 |-> PUSH ( 1 , 0 )
 	434 |-> DUP ( 1 )
 	435 |-> REVERT
+tag_38:
 	436 |-> JUMPDEST
+		/* "contracts/GnosisSafe.sol":12124:12491  function getMessageHash(... */
 	437 |-> POP
 	438 |-> PUSH ( 2 , 622 )
 	441 |-> PUSH ( 1 , 4 )
@@ -209,6 +217,7 @@
 	455 |-> PUSH ( 1 , 0 )
 	457 |-> DUP ( 1 )
 	458 |-> REVERT
+tag_40:									/* "contracts/GnosisSafe.sol":12124:12491  function getMessageHash(... */
 	459 |-> JUMPDEST
 	460 |-> DUP ( 2 )
 	461 |-> ADD
@@ -229,6 +238,8 @@
 	484 |-> PUSH ( 1 , 0 )
 	486 |-> DUP ( 1 )
 	487 |-> REVERT
+    tag_41:
+        /* "contracts/GnosisSafe.sol":12124:12491  function getMessageHash(... */
 	488 |-> JUMPDEST
 	489 |-> DUP ( 3 )
 	490 |-> ADD
@@ -243,6 +254,8 @@
 	502 |-> PUSH ( 1 , 0 )
 	504 |-> DUP ( 1 )
 	505 |-> REVERT
+    tag_42:
+        /* "contracts/GnosisSafe.sol":12124:12491  function getMessageHash(... */
 	506 |-> JUMPDEST
 	507 |-> DUP ( 1 )
 	508 |-> CALLDATALOAD
@@ -267,6 +280,8 @@
 	536 |-> PUSH ( 1 , 0 )
 	538 |-> DUP ( 1 )
 	539 |-> REVERT
+    tag_43:
+        /* "contracts/GnosisSafe.sol":12124:12491  function getMessageHash(... */
 	540 |-> JUMPDEST
 	541 |-> SWAP ( 2 )
 	542 |-> SWAP ( 1 )
@@ -322,6 +337,7 @@
 	601 |-> ADD
 	602 |-> SWAP ( 3 )
 	603 |-> POP
+/* "contracts/GnosisSafe.sol":12124:12491  function getMessageHash(... */
 	604 |-> POP
 	605 |-> POP
 	606 |-> POP
@@ -338,6 +354,7 @@
 	617 |-> POP
 	618 |-> PUSH ( 2 , 5654 )
 	621 |-> JUMP
+tag_39:
 	622 |-> JUMPDEST
 	623 |-> PUSH ( 1 , 64 )
 	625 |-> MLOAD
@@ -357,6 +374,8 @@
 	641 |-> SUB
 	642 |-> SWAP ( 1 )
 	643 |-> RETURN
+/* "contracts/base/OwnerManager.sol":2250:2895  function addOwnerWithThreshold(address owner, uint256 _threshold)... */
+tag_3:
 	644 |-> JUMPDEST
 	645 |-> CALLVALUE
 	646 |-> DUP ( 1 )
@@ -366,6 +385,7 @@
 	652 |-> PUSH ( 1 , 0 )
 	654 |-> DUP ( 1 )
 	655 |-> REVERT
+tag_45: 					/* "contracts/base/OwnerManager.sol":2250:2895  function addOwnerWithThreshold(address owner, uint256 _threshold)... */
 	656 |-> JUMPDEST
 	657 |-> POP
 	658 |-> PUSH ( 2 , 733 )
@@ -382,6 +402,7 @@
 	675 |-> PUSH ( 1 , 0 )
 	677 |-> DUP ( 1 )
 	678 |-> REVERT
+tag_47: 					/* "contracts/base/OwnerManager.sol":2250:2895  function addOwnerWithThreshold(address owner, uint256 _threshold)... */
 	679 |-> JUMPDEST
 	680 |-> DUP ( 2 )
 	681 |-> ADD
@@ -410,10 +431,13 @@
 	726 |-> POP
 	727 |-> POP
 	728 |-> POP
-	729 |-> PUSH ( 2 , 6027 )
+	729 |-> PUSH ( 2 , 6027 )	//tag_48
 	732 |-> JUMP
+tag_46:
 	733 |-> JUMPDEST
 	734 |-> STOP
+        /* "contracts/GnosisSafe.sol":2265:2593  function setup(address[] calldata _owners, uint256 _threshold, address to, bytes calldata data)... */
+tag_4:
 	735 |-> JUMPDEST
 	736 |-> CALLVALUE
 	737 |-> DUP ( 1 )
@@ -628,15 +652,19 @@
 	1036 |-> SUB
 	1037 |-> SWAP ( 1 )
 	1038 |-> RETURN
+        /* "contracts/GnosisSafe.sol":11499:11966  function isValidSignature(bytes calldata _data, bytes calldata _signature)... */
+tag_6:
 	1039 |-> JUMPDEST
 	1040 |-> CALLVALUE
 	1041 |-> DUP ( 1 )
 	1042 |-> ISZERO
-	1043 |-> PUSH ( 2 , 1051 )
+	1043 |-> PUSH ( 2 , 1051 ) //tag_62
 	1046 |-> JUMPI
 	1047 |-> PUSH ( 1 , 0 )
 	1049 |-> DUP ( 1 )
 	1050 |-> REVERT
+tag_62:
+        /* "contracts/GnosisSafe.sol":11499:11966  function isValidSignature(bytes calldata _data, bytes calldata _signature)... */
 	1051 |-> JUMPDEST
 	1052 |-> POP
 	1053 |-> PUSH ( 2 , 1256 )
@@ -1150,15 +1178,20 @@
 	1742 |-> SUB
 	1743 |-> SWAP ( 1 )
 	1744 |-> RETURN
+/* "contracts/base/ModuleManager.sol":1207:1747  function enableModule(Module module)... */
+tag_10:
 	1745 |-> JUMPDEST
 	1746 |-> CALLVALUE
 	1747 |-> DUP ( 1 )
 	1748 |-> ISZERO
-	1749 |-> PUSH ( 2 , 1757 )
+	1749 |-> PUSH ( 2 , 1757 ) //tag_87
 	1752 |-> JUMPI
 	1753 |-> PUSH ( 1 , 0 )
 	1755 |-> DUP ( 1 )
 	1756 |-> REVERT
+
+tag_87:
+		/* "contracts/base/ModuleManager.sol":1207:1747  function enableModule(Module module)... */
 	1757 |-> JUMPDEST
 	1758 |-> POP
 	1759 |-> PUSH ( 2 , 1824 )
@@ -1198,6 +1231,8 @@
 	1823 |-> JUMP
 	1824 |-> JUMPDEST
 	1825 |-> STOP
+/* "contracts/base/OwnerManager.sol":5454:5895  function changeThreshold(uint256 _threshold)... */
+tag_11:
 	1826 |-> JUMPDEST
 	1827 |-> CALLVALUE
 	1828 |-> DUP ( 1 )
@@ -1244,6 +1279,8 @@
 	1882 |-> JUMP
 	1883 |-> JUMPDEST
 	1884 |-> STOP
+/* "contracts/GnosisSafe.sol":3580:5058  function execTransaction(... */
+tag_12:
 	1885 |-> JUMPDEST
 	1886 |-> CALLVALUE
 	1887 |-> DUP ( 1 )
@@ -1580,6 +1617,9 @@
 	2386 |-> SUB
 	2387 |-> SWAP ( 1 )
 	2388 |-> RETURN
+
+/* "contracts/common/MasterCopy.sol":626:883  function changeMasterCopy(address _masterCopy)... */
+tag_14:
 	2389 |-> JUMPDEST
 	2390 |-> CALLVALUE
 	2391 |-> DUP ( 1 )
@@ -1764,15 +1804,21 @@
 	2688 |-> SUB
 	2689 |-> SWAP ( 1 )
 	2690 |-> RETURN
+
+		/* "contracts/GnosisSafe.sol":6414:8914  function checkSignatures(bytes32 dataHash, bytes memory data, bytes memory signatures, bool consumeHash)... */
+tag_17:
 	2691 |-> JUMPDEST
 	2692 |-> CALLVALUE
 	2693 |-> DUP ( 1 )
 	2694 |-> ISZERO
-	2695 |-> PUSH ( 2 , 2703 )
+	2695 |-> PUSH ( 2 , 2703 ) //tag_123
 	2698 |-> JUMPI
 	2699 |-> PUSH ( 1 , 0 )
 	2701 |-> DUP ( 1 )
 	2702 |-> REVERT
+
+tag_123:
+		/* "contracts/GnosisSafe.sol":6414:8914  function checkSignatures(bytes32 dataHash, bytes memory data, bytes memory signatures, bool consumeHash)... */
 	2703 |-> JUMPDEST
 	2704 |-> POP
 	2705 |-> PUSH ( 2 , 3062 )
@@ -1789,6 +1835,8 @@
 	2722 |-> PUSH ( 1 , 0 )
 	2724 |-> DUP ( 1 )
 	2725 |-> REVERT
+tag_125:
+		/* "contracts/GnosisSafe.sol":6414:8914  function checkSignatures(bytes32 dataHash, bytes memory data, bytes memory signatures, bool consumeHash)... */
 	2726 |-> JUMPDEST
 	2727 |-> DUP ( 2 )
 	2728 |-> ADD
@@ -1818,6 +1866,8 @@
 	2761 |-> PUSH ( 1 , 0 )
 	2763 |-> DUP ( 1 )
 	2764 |-> REVERT
+tag_126:
+		/* "contracts/GnosisSafe.sol":6414:8914  function checkSignatures(bytes32 dataHash, bytes memory data, bytes memory signatures, bool consumeHash)... */
 	2765 |-> JUMPDEST
 	2766 |-> DUP ( 3 )
 	2767 |-> ADD
@@ -1832,6 +1882,8 @@
 	2779 |-> PUSH ( 1 , 0 )
 	2781 |-> DUP ( 1 )
 	2782 |-> REVERT
+tag_127:
+		/* "contracts/GnosisSafe.sol":6414:8914  function checkSignatures(bytes32 dataHash, bytes memory data, bytes memory signatures, bool consumeHash)... */
 	2783 |-> JUMPDEST
 	2784 |-> DUP ( 1 )
 	2785 |-> CALLDATALOAD
@@ -1856,6 +1908,8 @@
 	2813 |-> PUSH ( 1 , 0 )
 	2815 |-> DUP ( 1 )
 	2816 |-> REVERT
+tag_128:
+		/* "contracts/GnosisSafe.sol":6414:8914  function checkSignatures(bytes32 dataHash, bytes memory data, bytes memory signatures, bool consumeHash)... */
 	2817 |-> JUMPDEST
 	2818 |-> SWAP ( 2 )
 	2819 |-> SWAP ( 1 )
@@ -1889,6 +1943,7 @@
 	2853 |-> ADD
 	2854 |-> DUP ( 4 )
 	2855 |-> DUP ( 4 )
+				/* "--CODEGEN--":30:33   */
 	2856 |-> DUP ( 1 )
 	2857 |-> DUP ( 3 )
 	2858 |-> DUP ( 5 )
@@ -1911,6 +1966,7 @@
 	2878 |-> ADD
 	2879 |-> SWAP ( 3 )
 	2880 |-> POP
+					/* "contracts/GnosisSafe.sol":6414:8914  function checkSignatures(bytes32 dataHash, bytes memory data, bytes memory signatures, bool consumeHash)... */
 	2881 |-> POP
 	2882 |-> POP
 	2883 |-> POP
@@ -1932,11 +1988,13 @@
 	2905 |-> DUP ( 2 )
 	2906 |-> GT
 	2907 |-> ISZERO
-	2908 |-> PUSH ( 2 , 2916 )
+	2908 |-> PUSH ( 2 , 2916 )		// tag_129
 	2911 |-> JUMPI
 	2912 |-> PUSH ( 1 , 0 )
 	2914 |-> DUP ( 1 )
 	2915 |-> REVERT
+tag_129:
+		/* "contracts/GnosisSafe.sol":6414:8914  function checkSignatures(bytes32 dataHash, bytes memory data, bytes memory signatures, bool consumeHash)... */
 	2916 |-> JUMPDEST
 	2917 |-> DUP ( 3 )
 	2918 |-> ADD
@@ -1951,6 +2009,9 @@
 	2930 |-> PUSH ( 1 , 0 )
 	2932 |-> DUP ( 1 )
 	2933 |-> REVERT
+
+tag_130:
+		/* "contracts/GnosisSafe.sol":6414:8914  function checkSignatures(bytes32 dataHash, bytes memory data, bytes memory signatures, bool consumeHash)... */
 	2934 |-> JUMPDEST
 	2935 |-> DUP ( 1 )
 	2936 |-> CALLDATALOAD
@@ -1975,6 +2036,9 @@
 	2964 |-> PUSH ( 1 , 0 )
 	2966 |-> DUP ( 1 )
 	2967 |-> REVERT
+tag_131:
+		/* "contracts/GnosisSafe.sol":6414:8914  function checkSignatures(bytes32 dataHash, bytes memory data, bytes memory signatures, bool consumeHash)... */
+		//end of checkSignatures
 	2968 |-> JUMPDEST
 	2969 |-> SWAP ( 2 )
 	2970 |-> SWAP ( 1 )
@@ -2030,6 +2094,8 @@
 	3029 |-> ADD
 	3030 |-> SWAP ( 3 )
 	3031 |-> POP
+/* "contracts/GnosisSafe.sol":6414:8914  function checkSignatures(bytes32 dataHash, bytes memory data, bytes memory signatures, bool consumeHash)... */
+
 	3032 |-> POP
 	3033 |-> POP
 	3034 |-> POP
@@ -2056,7 +2122,8 @@
 	3056 |-> POP
 	3057 |-> POP
 	3058 |-> PUSH ( 2 , 11671 )
-	3061 |-> JUMP
+	3061 |-> JUMP 		// in
+tag_124:
 	3062 |-> JUMPDEST
 	3063 |-> PUSH ( 1 , 64 )
 	3065 |-> MLOAD
