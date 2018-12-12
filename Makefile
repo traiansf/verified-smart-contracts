@@ -9,7 +9,7 @@ ERC20+=vyper zeppelin
 endif
 
 ifneq (,$(or $(findstring all,$(MODE)),$(findstring k-test,$(MODE))))
-SUBDIRS+=k-test
+#SUBDIRS+=k-test
 endif
 
 ifneq (,$(or $(findstring all,$(MODE)),$(findstring erc20,$(MODE))))
@@ -21,7 +21,8 @@ ifneq (,$(or $(findstring all,$(MODE)),$(findstring bihu,$(MODE))))
 endif
 
 ifneq (,$(or $(findstring all,$(MODE)),$(findstring gnosis,$(MODE))))
-SUBDIRS+=gnosis gnosis/test gnosis-imap
+#SUBDIRS+=gnosis gnosis/test gnosis-imap
+SUBDIRS+=gnosis/test gnosis-imap
 endif
 
 ifneq (,$(or $(findstring all,$(MODE)),$(findstring dom,$(MODE))))
@@ -29,6 +30,6 @@ ifneq (,$(or $(findstring all,$(MODE)),$(findstring dom,$(MODE))))
 ERC20+=gno
 endif
 
-SUBDIRS+=$(addprefix erc20/,$(ERC20))
+#SUBDIRS+=$(addprefix erc20/,$(ERC20))
 
 include resources/kprove-group.mak

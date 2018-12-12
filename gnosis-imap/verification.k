@@ -31,9 +31,11 @@ module VERIFICATION
     rule #gas(NONMEM, MEM) -Int #symCmem(MEM') => #gas(NONMEM, MEM +Int MEM')
     rule #gas(NONMEM, MEM) -Int NONMEM' => #gas(NONMEM +Int NONMEM', MEM)  requires #getKLabelString(NONMEM') =/=String "#symCmem"
 
-    rule _ <=Int #gas(_,_)  => true
-    rule #gas(_, _) <Int _  => false
+    rule G <=Int #gas(_,_)  => true  requires #getKLabelString(G) =/=String "#gas"
+    rule #gas(_, _) <Int G  => false requires #getKLabelString(G) =/=String "#gas"
 
+    rule 3000 <=Int #symCcallgas(_, _, _, _, _) => true
+    rule #symCcallgas(_, _, _, _, _) <Int 3000 => false
 
   // ########################
   // Account Map
@@ -80,8 +82,9 @@ module VERIFICATION
 
     rule WS ++ .WordStack => WS
 
-    rule #sizeWordStackAux(WS, N) <Int SIZE => #sizeWordStackAux(WS, 0) +Int N <Int SIZE  requires N =/=Int 0
-    rule #sizeWordStackAux(WS, N) +Int DELTA >Int SIZELIMIT => (#sizeWordStackAux(WS, 0) +Int N) +Int DELTA >Int SIZELIMIT  requires N =/=Int 0
+    rule sizeWordStackAux(WS, N) <Int SIZE => sizeWordStackAux(WS, 0) +Int N <Int SIZE  requires N =/=Int 0
+    rule SIZELIMIT <Int sizeWordStackAux(WS, N) +Int DELTA  => SIZELIMIT <Int (sizeWordStackAux(WS, 0) +Int N) +Int DELTA  requires N =/=Int 0
+    rule SIZELIMIT <Int sizeWordStackAux(WS, N) => SIZELIMIT <Int sizeWordStackAux(WS, 0) +Int N  requires N =/=Int 0
 
 
   // ########################
@@ -122,7 +125,7 @@ module VERIFICATION
     rule #asWord(#buf(32, DATA)) => DATA  requires #rangeUInt(256, DATA)
 
     rule #padToWidth(32, #asByteStack(V)) => #buf(32, V) // #asByteStackInWidth(V, 32)
-      requires 0 <=Int V andBool V <Int pow256
+      requires 0 <=Int V andBool V <Int pow256 andBool #getKLabelString(V) =/=String "#asWord"
 
     rule #buf(32, #asWord(#bufSeg(BUF, START, WIDTH))) => #bufSeg(BUF, START +Int WIDTH -Int 32, 32)  requires WIDTH >=Int 32
 
@@ -180,5 +183,11 @@ module VERIFICATION
 
     rule ((X *Int Y) /Int Z) /Int Y => X /Int Z
       requires Y =/=Int 0
+
+    // 0xff..ff00..00 (16 1's followed by 240 0's)
+    rule 115790322390251417039241401711187164934754157181743688420499462401711837020160 &Int #asWord(WS1 ++ WS2)
+        => #asWord(WS1 ++ #buf(30, 0))
+      requires #sizeWordStack(WS1) ==Int 2
+       andBool #sizeWordStack(WS2) ==Int 30
 
 endmodule
