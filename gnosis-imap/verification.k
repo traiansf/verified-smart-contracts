@@ -18,7 +18,7 @@ module VERIFICATION
 
     rule 0 <=Int #memoryUsageUpdate(MU, START, WIDTH) => true
 
-    rule #memoryUsageUpdate(MU, START, WIDTH) >=Int pow256 => false  requires START +Int WIDTH <Int 3705346855594118253554271520278013051304639509300498049262642688253220148477921
+    rule pow256 <=Int #memoryUsageUpdate(MU, START, WIDTH) => false  requires START +Int WIDTH <Int 3705346855594118253554271520278013051304639509300498049262642688253220148477921
     rule #memoryUsageUpdate(MU, START, WIDTH) <Int  pow256 => true   requires START +Int WIDTH <Int 3705346855594118253554271520278013051304639509300498049262642688253220148477921
 
 
@@ -57,8 +57,8 @@ module VERIFICATION
     // select/store key equality
 
     rule hash2(A,B) ==K I => false
-      requires         notBool #isConcrete(hash2(A,B)) andBool #isConcrete(I)
-               andBool I <Int 1000000000 //random small-ish number bigger than any fixed storage location
+      requires #isConcrete(I)
+       andBool I <Int 20 //random small-ish number bigger than any fixed storage location
 
     rule I ==K hash2(A,B) => hash2(A,B) ==K I
       requires #isConcrete(I)
@@ -79,6 +79,9 @@ module VERIFICATION
       requires S1 ==Int S0 +Int W0
 
     rule WS ++ .WordStack => WS
+
+    rule #sizeWordStackAux(WS, N) <Int SIZE => #sizeWordStackAux(WS, 0) +Int N <Int SIZE  requires N =/=Int 0
+    rule #sizeWordStackAux(WS, N) +Int DELTA >Int SIZELIMIT => (#sizeWordStackAux(WS, 0) +Int N) +Int DELTA >Int SIZELIMIT  requires N =/=Int 0
 
 
   // ########################
@@ -114,6 +117,7 @@ module VERIFICATION
   // ########################
 
     rule (X +Int 31) /Int 32 *Int 32 => #ceil32(X)
+    rule (31 +Int X) /Int 32 *Int 32 => #ceil32(X)
 
     rule #asWord(#buf(32, DATA)) => DATA  requires #rangeUInt(256, DATA)
 
@@ -128,17 +132,42 @@ module VERIFICATION
     rule #bufSeg(BUF, START, 1) => #bufElm(BUF, START) : .WordStack
     rule #asWord(#bufElm(BUF, INDEX) : .WordStack) => #bufElm(BUF, INDEX)
 
+    rule #buf(32, DATA) => #padToWidth(32, #asByteStack(DATA)) [concrete]
+
   // ########################
   // Arithmetic
   // ########################
 
-    rule (A +Int I2) +Int (I3 -Int A) => I2 +Int I3
-    rule (A +Int I2) -Int (A +Int I3) => I2 -Int I3
-    rule (A +Int I2) -Int (I3 +Int A) => I2 -Int I3
+    rule I1 +Int (A +Int I2) => A +Int (I1 +Int I2) when notBool #isConcrete(A) andBool #isConcrete(I1) andBool #isConcrete(I2)
+    rule I1 +Int (I2 +Int A) => A +Int (I1 +Int I2) when notBool #isConcrete(A) andBool #isConcrete(I1) andBool #isConcrete(I2)
+
+    rule (A +Int I1) +Int I2 => A +Int (I1 +Int I2) when notBool #isConcrete(A) andBool #isConcrete(I1) andBool #isConcrete(I2)
+    rule (I1 +Int A) +Int I2 => A +Int (I1 +Int I2) when notBool #isConcrete(A) andBool #isConcrete(I1) andBool #isConcrete(I2)
+
+    rule (A +Int I1) -Int I2 => A +Int (I1 -Int I2) when notBool #isConcrete(A) andBool #isConcrete(I1) andBool #isConcrete(I2)
+    rule (I1 +Int A) -Int I2 => A +Int (I1 -Int I2) when notBool #isConcrete(A) andBool #isConcrete(I1) andBool #isConcrete(I2)
+
+    rule (A +Int I1) +Int (I2 +Int B) => (A +Int B) +Int (I1 +Int I2) when notBool #isConcrete(A) andBool notBool #isConcrete(B) andBool #isConcrete(I1) andBool #isConcrete(I2)
+
+    rule (A +Int I1) +Int (I2 -Int A) => I1 +Int I2
+    rule (I1 +Int A) +Int (I2 -Int A) => I1 +Int I2
+
+    rule (A +Int I1) -Int (A +Int I2) => I1 -Int I2
+    rule (A +Int I1) -Int (I2 +Int A) => I1 -Int I2
+    rule (I1 +Int A) -Int (A +Int I2) => I1 -Int I2
+    rule (I1 +Int A) -Int (I2 +Int A) => I1 -Int I2
 
     // Simplify Cmem(_,_) - Cmem(_, _)
     rule A +Int (I1 -Int A) => I1
     rule (I1 +Int (A -Int I0)) +Int (I2 -Int A) => I1 +Int (I2 -Int I0)
+
+    // 0xffff...f &Int N = N
+    rule MASK &Int N => N  requires MASK ==Int (2 ^Int (log2Int(MASK) +Int 1)) -Int 1 // MASK = 0xffff...f
+                            andBool 0 <=Int N andBool N <=Int MASK
+
+    // N &Int 0xffff...f = N
+    rule N &Int MASK => N  requires MASK ==Int (2 ^Int (log2Int(MASK) +Int 1)) -Int 1 // MASK = 0xffff...f
+                            andBool 0 <=Int N andBool N <=Int MASK
 
     // TODO: move to builtin
     rule N -Int N => 0

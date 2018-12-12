@@ -1,6 +1,6 @@
-BUILD_DIR:=../.build
+BUILD_DIR:=../../gnosis-imap/.build
 
-LOCAL_LEMMAS:=../abstract-semantics.k ../verification.k
+LOCAL_LEMMAS:=../../gnosis-imap/abstract-semantics.k ../../gnosis-imap/verification.k
 TMPLS:=../module-tmpl.k ../spec-tmpl.k
 
 SPEC_GROUP:=gnosis-test

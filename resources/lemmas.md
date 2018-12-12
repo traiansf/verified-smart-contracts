@@ -178,43 +178,6 @@ Below are universal simplification rules that are free to be used in any context
     rule N &Int N => N
 ```
 
-The following simplification rules are local, meant to be used in specific contexts.
-The rules are applied only when the side-conditions are met.
-These rules are specific to reasoning about EVM programs.
-
-```k
-    //orienting symbolic term to be first, converting -Int to +Int for concrete values.
-    rule I +Int B => B          +Int I when #isConcrete(I) andBool notBool #isConcrete(B)
-    rule A -Int I => A +Int (0 -Int I) when notBool #isConcrete(A) andBool #isConcrete(I)
-
-    rule (A +Int I2) +Int I3 => A +Int (I2 +Int I3) when notBool #isConcrete(A) andBool #isConcrete(I2) andBool #isConcrete(I3)
-
-    rule I1 +Int (B +Int I3) => B +Int (I1 +Int I3) when #isConcrete(I1) andBool notBool #isConcrete(B) andBool #isConcrete(I3)
-    rule I1 -Int (B +Int I3) => (I1 -Int I3) -Int B when #isConcrete(I1) andBool notBool #isConcrete(B) andBool #isConcrete(I3)
-    rule (I1 -Int B) +Int I3 => (I1 +Int I3) -Int B when #isConcrete(I1) andBool notBool #isConcrete(B) andBool #isConcrete(I3)
-
-    rule I1 +Int (I2 +Int C) => (I1 +Int I2) +Int C when #isConcrete(I1) andBool #isConcrete(I2) andBool notBool #isConcrete(C)
-    rule I1 +Int (I2 -Int C) => (I1 +Int I2) -Int C when #isConcrete(I1) andBool #isConcrete(I2) andBool notBool #isConcrete(C)
-    rule I1 -Int (I2 +Int C) => (I1 -Int I2) -Int C when #isConcrete(I1) andBool #isConcrete(I2) andBool notBool #isConcrete(C)
-    rule I1 -Int (I2 -Int C) => (I1 -Int I2) +Int C when #isConcrete(I1) andBool #isConcrete(I2) andBool notBool #isConcrete(C)
-
-    rule I1 &Int (I2 &Int C) => (I1 &Int I2) &Int C when #isConcrete(I1) andBool #isConcrete(I2) andBool notBool #isConcrete(C)
-
-    // 0xffff...f &Int N = N
-    rule MASK &Int N => N  requires MASK ==Int (2 ^Int (log2Int(MASK) +Int 1)) -Int 1 // MASK = 0xffff...f
-                            andBool 0 <=Int N andBool N <=Int MASK
-
-    // N &Int 0xffff...f = N
-    rule N &Int MASK => N  requires MASK ==Int (2 ^Int (log2Int(MASK) +Int 1)) -Int 1 // MASK = 0xffff...f
-                            andBool 0 <=Int N andBool N <=Int MASK
-
-
-
-    // for gas calculation
-    rule A -Int (#if C #then B1 #else B2 #fi) => #if C #then (A -Int B1) #else (A -Int B2) #fi
-    rule (#if C #then B1 #else B2 #fi) -Int A => #if C #then (B1 -Int A) #else (B2 -Int A) #fi
-```
-
 Operator direction normalization rules. Required to reduce the number of forms of inequalities that can be matched by 
 general lemmas. We chose to keep `<Int` and `<=Int` because those operators are used in all range lemmas and in
 `#range` macros. Operators `>Int` and `>=Int` are still allowed anywhere except rules LHS.
@@ -327,14 +290,7 @@ The other rules are similar.
 These lemmas abstract some properties about `#sizeWordStack`:
 
 ```k
-    rule 0 <=Int #sizeWordStack ( _ , _ ) => true [smt-lemma]
-    /*rule #sizeWordStack ( WS , N:Int )
-      => #sizeWordStack ( WS , 0 ) +Int N
-      requires N =/=K 0*/
-    rule #sizeWordStack ( WS , N:Int )
-      => N +Int #sizeWordStack ( WS , 0 )
-      requires N =/=K 0
-      [lemma]
+    rule 0 <=Int #sizeWordStack ( _ ) => true [smt-lemma]
 
 endmodule
 ```
