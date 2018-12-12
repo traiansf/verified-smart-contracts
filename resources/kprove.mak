@@ -11,6 +11,7 @@ $(error BUILD_DIR does not exist)
 endif
 
 K_REPO_URL?=https://github.com/kframework/k
+KORE_REPO_URL?=https://github.com/kframework/kore
 KEVM_REPO_URL?=https://github.com/kframework/evm-semantics
 
 ifndef SPEC_GROUP
@@ -43,13 +44,19 @@ RESOURCES:=$(ROOT)/resources
 SPECS_DIR:=$(ROOT)/specs
 
 K_VERSION   :=$(shell cat $(BUILD_DIR)/.k.rev)
+KORE_VERSION:=$(shell cat $(BUILD_DIR)/.kore.rev)
 KEVM_VERSION:=$(shell cat $(BUILD_DIR)/.kevm.rev)
 
 K_REPO_DIR:=$(abspath $(BUILD_DIR)/k)
+KORE_REPO_DIR:=$(abspath $(BUILD_DIR)/kore)
 KEVM_REPO_DIR:=$(abspath $(BUILD_DIR)/evm-semantics)
+KEVM_JAVA_DIR:=$(KEVM_REPO_DIR)/.build/java
+KEVM_HASKELL_DIR:=$(KEVM_REPO_DIR)/.build/haskell
 
 K_BIN:=$(abspath $(K_REPO_DIR)/k-distribution/target/release/k/bin)
-KPROVE:=$(K_BIN)/kprove -v -d $(KEVM_REPO_DIR)/.build/java -m VERIFICATION --z3-impl-timeout 500 $(KPROVE_OPTS)
+KORE_BIN:=$(abspath $(KORE_REPO_DIR)/bin/kore-exec)
+KPROVE:=$(K_BIN)/kprove -v -d $(KEVM_JAVA_DIR) -m VERIFICATION --z3-impl-timeout 500 $(KPROVE_OPTS)
+KORE_PROVE:=$(K_BIN)/kprove --haskell-backend-command $(KORE_BIN) -v -d $(KEVM_HASKELL_DIR) -m VERIFICATION --z3-impl-timeout 500 $(KPROVE_OPTS)
 
 SPEC_FILES:=$(patsubst %,$(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k,$(SPEC_NAMES))
 
@@ -62,7 +69,7 @@ export LUA_PATH
 # Dependencies
 #
 
-.PHONY: all clean clean-deps deps split-proof-tests test
+.PHONY: all clean clean-deps deps haskell-deps split-proof-tests test
 
 all: deps split-proof-tests
 
@@ -72,22 +79,39 @@ clean:
 clean-deps:
 	rm -rf $(SPECS_DIR) $(K_REPO_DIR) $(KEVM_REPO_DIR)
 
-deps: $(K_REPO_DIR) $(KEVM_REPO_DIR) $(TANGLER)
+deps: $(K_REPO_DIR) $(KEVM_REPO_DIR) $(TANGLER) $(KEVM_JAVA_DIR)
+
+haskell-deps:  $(K_REPO_DIR) $(KEVM_REPO_DIR) $(TANGLER) $(KEVM_HASKELL_DIR) $(KORE_REPO_DIR)
 
 $(K_REPO_DIR):
 	git clone $(K_REPO_URL) $(K_REPO_DIR)
 	cd $(K_REPO_DIR) \
 		&& git reset --hard $(K_VERSION) \
-		&& mvn package -DskipTests
+		&& git submodule update --init --recursive \
+		&& mvn package -DskipTests -DskipDocs
+
+$(KORE_REPO_DIR):
+	git clone $(KORE_REPO_URL) $(KORE_REPO_DIR)
+	cd $(KORE_REPO_DIR) \
+		&& git reset --hard $(KORE_VERSION) \
+		&& stack install --local-bin-path $(abspath $(KORE_REPO_DIR))/bin kore:exe:kore-exec
 
 $(KEVM_REPO_DIR):
 	git clone $(KEVM_REPO_URL) $(KEVM_REPO_DIR)
 	cd $(KEVM_REPO_DIR) \
 		&& git clean -fdx \
 		&& git reset --hard $(KEVM_VERSION) \
-		&& make tangle-deps \
+		&& make tangle-deps
+
+$(KEVM_JAVA_DIR): $(KEVM_REPO_DIR)
+	cd $(KEVM_REPO_DIR) \
 		&& make defn \
 		&& $(K_BIN)/kompile -v --debug --backend java -I .build/java -d .build/java --main-module ETHEREUM-SIMULATION --syntax-module ETHEREUM-SIMULATION .build/java/driver.k
+
+$(KEVM_HASKELL_DIR): $(KEVM_REPO_DIR)
+	cd $(KEVM_REPO_DIR) \
+		&& make haskell-defn \
+		&& $(K_BIN)/kompile -v --debug --backend haskell -I .build/haskell -d .build/haskell --main-module ETHEREUM-SIMULATION --syntax-module ETHEREUM-SIMULATION .build/haskell/driver.k
 
 $(TANGLER):
 	git submodule update --init -- $(PANDOC_TANGLE_SUBMODULE)
@@ -115,6 +139,10 @@ $(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k: $(TMPLS) $(SPEC_INI)
 #
 
 test: $(addsuffix .test,$(SPEC_FILES))
+test-kore: $(addsuffix .koretest,$(SPEC_FILES))
 
 $(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k.test: $(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k
 	$(KPROVE) $<
+
+$(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k.koretest: $(SPECS_DIR)/$(SPEC_GROUP)/%-spec.k
+	$(KORE_PROVE) $<

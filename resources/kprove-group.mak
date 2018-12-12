@@ -1,6 +1,7 @@
 SUBCLEAN=$(addsuffix .clean,$(SUBDIRS))
 SUBCLEANDEPS=$(addsuffix .clean-deps,$(SUBDIRS))
 SUBDEPS=$(addsuffix .deps,$(SUBDIRS))
+SUBHASKELLDEPS=$(addsuffix .haskell-deps,$(SUBDIRS))
 SUBPROOF=$(addsuffix .proof,$(SUBDIRS))
 SUBTEST=$(addsuffix .test,$(SUBDIRS))
 
@@ -10,6 +11,7 @@ all: $(SUBDIRS)
 clean: $(SUBCLEAN)
 clean-deps: $(SUBCLEANDEPS)
 deps: $(SUBDEPS)
+haskell-deps: $(SUBHASKELLDEPS)
 split-proof-tests: $(SUBPROOF)
 test: $(SUBTEST)
 
@@ -24,6 +26,9 @@ $(SUBCLEANDEPS): %.clean-deps:
 
 $(SUBDEPS): %.deps:
 	$(MAKE) -C $* deps
+
+$(SUBHASKELLDEPS): %.haskell-deps:
+	$(MAKE) -C $* haskell-deps
 
 $(SUBPROOF): %.proof:
 	$(MAKE) -C $* split-proof-tests

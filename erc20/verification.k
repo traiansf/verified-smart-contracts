@@ -1,7 +1,9 @@
 requires "edsl.k"
+requires "driver.k"
 requires "../lemmas.k"
 
 module VERIFICATION
+    imports ETHEREUM-SIMULATION
     imports EDSL
     imports LEMMAS
 

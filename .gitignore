@@ -2,6 +2,9 @@
 
 /.build/*
 !/.build/pandoc-tangle
+!/.build/k.rev
+!/.build/kevm.rev
+!/.build/kore.rev
 
 /specs/*
 

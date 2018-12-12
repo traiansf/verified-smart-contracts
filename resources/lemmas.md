@@ -145,9 +145,11 @@ It reduces the reasoning efforts of the underlying theorem prover, factoring out
     rule keccakIntList(V1:Int V2:Int .IntList) => hash2(V1, V2)
 
     // for terms came from bytecode not via #hashedLocation
-    rule keccak(WS) => keccakIntList(byteStack2IntList(WS))
-      requires ( notBool #isConcrete(WS) )
-       andBool ( #sizeWordStack(WS) ==Int 32 orBool #sizeWordStack(WS) ==Int 64 )
+    /* commented away because byteStack2IntList is not defined
+    // rule keccak(WS) => keccakIntList(byteStack2IntList(WS))
+    //  requires ( notBool #isConcrete(WS) )
+    //   andBool ( #sizeWordStack(WS) ==Int 32 orBool #sizeWordStack(WS) ==Int 64 )
+    */
 ```
 
 ### Integer Expression Simplification Rules
